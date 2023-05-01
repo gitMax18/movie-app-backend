@@ -48,6 +48,10 @@ public class Content {
         this.categories = categories;
     }
 
+    public void addCategory(Category category) {
+        categories.add(category);
+    }
+
     public Long getId() {
         return this.id;
     }

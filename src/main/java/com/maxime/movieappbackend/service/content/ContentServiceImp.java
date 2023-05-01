@@ -6,16 +6,26 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
+import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
+import com.maxime.movieappbackend.dto.content.PostContentToContentMapper;
+import com.maxime.movieappbackend.model.Category;
 import com.maxime.movieappbackend.model.Content;
+import com.maxime.movieappbackend.repository.CategoryRepository;
 import com.maxime.movieappbackend.repository.ContentRepository;
 
 @Service
 public class ContentServiceImp implements ContentService {
 
     private ContentRepository contentRepository;
+    private CategoryRepository categoryRepository;
+    private PostContentToContentMapper postContentToContentMapper;
 
-    public ContentServiceImp(ContentRepository contentRepository) {
+    public ContentServiceImp(ContentRepository contentRepository, CategoryRepository categoryRepository,
+            PostContentToContentMapper postContentToContentMapper) {
         this.contentRepository = contentRepository;
+        this.categoryRepository = categoryRepository;
+        this.postContentToContentMapper = postContentToContentMapper;
+
     }
 
     @Override
@@ -33,6 +43,12 @@ public class ContentServiceImp implements ContentService {
         }
 
         return opContent.get();
+    }
+
+    @Override
+    public Content createContent(PostContentRequestDto contentDto) {
+        Content content = postContentToContentMapper.apply(contentDto);
+        return contentRepository.save(content);
     }
 
 }
