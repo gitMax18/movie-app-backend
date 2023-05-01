@@ -16,4 +16,10 @@ public class RestExceptionsHandler {
         ErrorResponse error = new ErrorResponse(exception.getHttpStatusCode(), exception.getMessage());
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
+    }
 }
