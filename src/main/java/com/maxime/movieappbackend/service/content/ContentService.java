@@ -6,4 +6,6 @@ import com.maxime.movieappbackend.model.Content;
 
 public interface ContentService {
     List<Content> getAllContent();
+
+    Content getContentById(Long id);
 }
