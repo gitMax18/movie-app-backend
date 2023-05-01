@@ -6,6 +6,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +28,7 @@ public class Content {
     private String shortResume;
     @Column(name = "release_year")
     private Integer releaseYear;
+    @Enumerated(EnumType.STRING)
     private ContentType type;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -145,7 +148,6 @@ public class Content {
                 ", shortResume='" + getShortResume() + "'" +
                 ", releaseYear='" + getReleaseYear() + "'" +
                 ", type='" + getType() + "'" +
-                ", categories='" + getCategories() + "'" +
                 "}";
     }
 

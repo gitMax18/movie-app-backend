@@ -3,6 +3,8 @@ package com.maxime.movieappbackend.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Category {
     private Long id;
     private String name;
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Content> contents = new ArrayList<>();
 
     public Category() {
@@ -72,7 +75,6 @@ public class Category {
         return "{" +
                 " id='" + getId() + "'" +
                 ", name='" + getName() + "'" +
-                ", contents='" + getContents() + "'" +
                 "}";
     }
 
