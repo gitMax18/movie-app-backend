@@ -2,7 +2,8 @@ package com.maxime.movieappbackend.model;
 
 public enum ContentType {
     ANIME("ANIME"),
-    MOVIE("MOVIE");
+    MOVIE("MOVIE"),
+    SERIE("SERIE");
 
     private final String contentType;
 

@@ -31,7 +31,6 @@ public class ContentServiceImp implements ContentService {
     @Override
     public List<Content> getAllContent() {
         List<Content> contents = contentRepository.findAll();
-        contents.forEach(System.out::println);
         return contents;
     }
 
