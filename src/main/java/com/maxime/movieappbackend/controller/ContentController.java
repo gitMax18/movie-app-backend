@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
 import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.response.Response;
@@ -44,6 +46,12 @@ public class ContentController {
         Content newContent = contentService.createContent(contentDto);
 
         return new Response<Content>(HttpStatus.CREATED.value(), "Content created", newContent);
+    }
+
+    @DeleteMapping("/{id}")
+    public Response<NullNode> deleteContentById(@PathVariable Long id) {
+        contentService.deleteContentById(id);
+        return new Response<NullNode>(HttpStatus.OK.value(), "Content deleted", null);
     }
 
 }

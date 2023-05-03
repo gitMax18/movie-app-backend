@@ -50,4 +50,14 @@ public class ContentServiceImp implements ContentService {
         return contentRepository.save(content);
     }
 
+    @Override
+    public void deleteContentById(Long id) {
+        Optional<Content> opContent = contentRepository.findById(id);
+        if (!opContent.isPresent()) {
+            throw new RessourceNotFoundException("Content with id " + id + " not found");
+        }
+
+        contentRepository.deleteById(id);
+    }
+
 }

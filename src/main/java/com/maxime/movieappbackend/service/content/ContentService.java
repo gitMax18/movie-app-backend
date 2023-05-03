@@ -11,4 +11,6 @@ public interface ContentService {
     Content getContentById(Long id);
 
     Content createContent(PostContentRequestDto contentDto);
+
+    void deleteContentById(Long id);
 }
