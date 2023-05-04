@@ -7,5 +7,5 @@ import com.maxime.movieappbackend.model.Content;
 
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
-
+    boolean existsByTitle(String title);
 }

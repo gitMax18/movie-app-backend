@@ -1,11 +1,14 @@
 package com.maxime.movieappbackend.service.content;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
+import com.maxime.movieappbackend.Exception.exceptionTypes.UniqueConstraintException;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
 import com.maxime.movieappbackend.dto.content.PostContentToContentMapper;
 import com.maxime.movieappbackend.model.Content;
@@ -43,6 +46,11 @@ public class ContentServiceImp implements ContentService {
 
     @Override
     public Content createContent(PostContentRequestDto contentDto) {
+        if (contentRepository.existsByTitle(contentDto.getTitle())) {
+            Map<String, String> details = new HashMap<>();
+            details.put("title", contentDto.getTitle() + " already exist, title must be unique");
+            throw new UniqueConstraintException("Constraint violation", details);
+        }
         Content content = postContentToContentMapper.apply(contentDto);
         return contentRepository.save(content);
     }
@@ -59,6 +67,11 @@ public class ContentServiceImp implements ContentService {
 
     @Override
     public Content updateContent(Long id, PostContentRequestDto contentDto) {
+        if (contentRepository.existsByTitle(contentDto.getTitle())) {
+            Map<String, String> details = new HashMap<>();
+            details.put("title", contentDto.getTitle() + " already exist, title must be unique");
+            throw new UniqueConstraintException("Constraint violation", details);
+        }
         Content content = postContentToContentMapper.apply(contentDto);
         content.setId(id);
         return contentRepository.save(content);
