@@ -13,7 +13,7 @@ import com.maxime.movieappbackend.response.Response;
 import com.maxime.movieappbackend.service.content.CategoryService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = { "${app.origin}" })
 @RequestMapping("/api/categories")
 public class CategoryController {
 

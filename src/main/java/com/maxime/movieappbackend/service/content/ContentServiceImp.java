@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
 import com.maxime.movieappbackend.dto.content.PostContentToContentMapper;
-import com.maxime.movieappbackend.model.Category;
 import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.repository.CategoryRepository;
 import com.maxime.movieappbackend.repository.ContentRepository;
@@ -17,13 +16,11 @@ import com.maxime.movieappbackend.repository.ContentRepository;
 public class ContentServiceImp implements ContentService {
 
     private ContentRepository contentRepository;
-    private CategoryRepository categoryRepository;
     private PostContentToContentMapper postContentToContentMapper;
 
     public ContentServiceImp(ContentRepository contentRepository, CategoryRepository categoryRepository,
             PostContentToContentMapper postContentToContentMapper) {
         this.contentRepository = contentRepository;
-        this.categoryRepository = categoryRepository;
         this.postContentToContentMapper = postContentToContentMapper;
 
     }
@@ -58,6 +55,13 @@ public class ContentServiceImp implements ContentService {
         }
 
         contentRepository.deleteById(id);
+    }
+
+    @Override
+    public Content updateContent(Long id, PostContentRequestDto contentDto) {
+        Content content = postContentToContentMapper.apply(contentDto);
+        content.setId(id);
+        return contentRepository.save(content);
     }
 
 }

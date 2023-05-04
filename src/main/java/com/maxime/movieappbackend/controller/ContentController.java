@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.response.Response;
 import com.maxime.movieappbackend.service.content.ContentService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = { "${app.origin}" })
 @RestController
 @RequestMapping("/api/contents")
 public class ContentController {
@@ -52,6 +53,13 @@ public class ContentController {
     public Response<NullNode> deleteContentById(@PathVariable Long id) {
         contentService.deleteContentById(id);
         return new Response<NullNode>(HttpStatus.OK.value(), "Content deleted", null);
+    }
+
+    @PutMapping("/{id}")
+    public Response<Content> updateContent(@PathVariable Long id, @RequestBody PostContentRequestDto contentDto) {
+        Content updatedContent = contentService.updateContent(id, contentDto);
+
+        return new Response<Content>(HttpStatus.OK.value(), "Content updated", updatedContent);
     }
 
 }
