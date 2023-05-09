@@ -3,20 +3,33 @@ package com.maxime.movieappbackend.dto.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.maxime.movieappbackend.annotation.EnumTypeAnnotation;
 import com.maxime.movieappbackend.model.ContentType;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class PostContentRequestDto {
+    @NotBlank(message = "Title is required")
     private String title;
+    @NotBlank(message = "Resume is required")
     private String resume;
     private String shortResume;
+    @NotNull
+    @Min(value = 1951, message = "Release year must be between 1951 and 2155")
+    @Max(value = 2155, message = "Release year must be between 1951 and 2155")
     private Integer releaseYear;
-    private ContentType type;
+    @NotNull
+    @EnumTypeAnnotation(enumClass = ContentType.class)
+    private String type;
     List<Long> categories = new ArrayList<>();
 
     public PostContentRequestDto() {
     }
 
-    public PostContentRequestDto(String title, String resume, String shortResume, Integer releaseYear, ContentType type,
+    public PostContentRequestDto(String title, String resume, String shortResume, Integer releaseYear, String type,
             List<Long> categories) {
         this.title = title;
         this.resume = resume;
@@ -58,11 +71,11 @@ public class PostContentRequestDto {
         this.releaseYear = releaseYear;
     }
 
-    public ContentType getType() {
+    public String getType() {
         return this.type;
     }
 
-    public void setType(ContentType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -94,7 +107,7 @@ public class PostContentRequestDto {
         return this;
     }
 
-    public PostContentRequestDto type(ContentType type) {
+    public PostContentRequestDto type(String type) {
         setType(type);
         return this;
     }

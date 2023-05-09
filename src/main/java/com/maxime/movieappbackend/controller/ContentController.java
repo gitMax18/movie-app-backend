@@ -20,6 +20,8 @@ import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.response.Response;
 import com.maxime.movieappbackend.service.content.ContentService;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = { "${app.origin}" })
 @RestController
 @RequestMapping("/api/contents")
@@ -43,7 +45,7 @@ public class ContentController {
     }
 
     @PostMapping("")
-    public Response<Content> createContent(@RequestBody PostContentRequestDto contentDto) {
+    public Response<Content> createContent(@Valid @RequestBody PostContentRequestDto contentDto) {
         Content newContent = contentService.createContent(contentDto);
 
         return new Response<Content>(HttpStatus.CREATED.value(), "Content created", newContent);
@@ -56,7 +58,8 @@ public class ContentController {
     }
 
     @PutMapping("/{id}")
-    public Response<Content> updateContent(@PathVariable Long id, @RequestBody PostContentRequestDto contentDto) {
+    public Response<Content> updateContent(@PathVariable Long id,
+            @Valid @RequestBody PostContentRequestDto contentDto) {
         Content updatedContent = contentService.updateContent(id, contentDto);
 
         return new Response<Content>(HttpStatus.OK.value(), "Content updated", updatedContent);

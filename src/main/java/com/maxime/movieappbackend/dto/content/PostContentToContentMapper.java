@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.model.Content;
+import com.maxime.movieappbackend.model.ContentType;
 import com.maxime.movieappbackend.repository.CategoryRepository;
 import com.maxime.movieappbackend.model.Category;
 
@@ -26,13 +27,15 @@ public class PostContentToContentMapper implements Function<PostContentRequestDt
         content.setReleaseYear(contentDto.getReleaseYear());
         content.setResume(contentDto.getResume());
         content.setShortResume(contentDto.getShortResume());
-        content.type(contentDto.getType());
-        for (Long categoryId : contentDto.getCategories()) {
-            Optional<Category> opCategory = categoryRepository.findById(categoryId);
-            if (!opCategory.isPresent()) {
-                throw new RessourceNotFoundException("Category with id " + categoryId + " not found");
+        content.type(ContentType.valueOf(contentDto.getType()));
+        if (contentDto.getCategories() != null) {
+            for (Long categoryId : contentDto.getCategories()) {
+                Optional<Category> opCategory = categoryRepository.findById(categoryId);
+                if (!opCategory.isPresent()) {
+                    throw new RessourceNotFoundException("Category with id " + categoryId + " not found");
+                }
+                content.addCategory(opCategory.get());
             }
-            content.addCategory(opCategory.get());
         }
         return content;
     }
