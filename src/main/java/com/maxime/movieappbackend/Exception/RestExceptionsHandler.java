@@ -48,12 +48,6 @@ public class RestExceptionsHandler {
     // // throw (exception);
     // }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
-        return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler()
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
@@ -62,7 +56,15 @@ public class RestExceptionsHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Constraint Error", errors);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                "Constraint Error", errors);
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage());
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
     }
 

@@ -31,6 +31,8 @@ public class Content {
     private Integer releaseYear;
     @Enumerated(EnumType.STRING)
     private ContentType type;
+    @Column(name = "image_path")
+    private String imagePath;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "content_category", joinColumns = @JoinColumn(name = "content_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -40,13 +42,14 @@ public class Content {
     }
 
     public Content(String title, String resume, String shortResume, Integer releaseYear, ContentType type,
-            List<Category> categories) {
+            List<Category> categories, String imagePath) {
         this.title = title;
         this.resume = resume;
         this.shortResume = shortResume;
         this.releaseYear = releaseYear;
         this.type = type;
         this.categories = categories;
+        this.imagePath = imagePath;
     }
 
     public void addCategory(Category category) {
@@ -144,6 +147,14 @@ public class Content {
         return this;
     }
 
+    public String getImagePath() {
+        return this.imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -152,6 +163,7 @@ public class Content {
                 ", resume='" + getResume() + "'" +
                 ", shortResume='" + getShortResume() + "'" +
                 ", releaseYear='" + getReleaseYear() + "'" +
+                ", imagePath='" + getImagePath() + "'" +
                 ", type='" + getType() + "'" +
                 "}";
     }

@@ -1,4 +1,4 @@
-package com.maxime.movieappbackend.service.content;
+package com.maxime.movieappbackend.service.category;
 
 import java.util.List;
 

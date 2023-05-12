@@ -3,6 +3,8 @@ package com.maxime.movieappbackend.dto.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.maxime.movieappbackend.annotation.EnumTypeAnnotation;
 import com.maxime.movieappbackend.model.ContentType;
 
@@ -25,18 +27,20 @@ public class PostContentRequestDto {
     @EnumTypeAnnotation(enumClass = ContentType.class)
     private String type;
     List<Long> categories = new ArrayList<>();
+    MultipartFile file;
 
     public PostContentRequestDto() {
     }
 
     public PostContentRequestDto(String title, String resume, String shortResume, Integer releaseYear, String type,
-            List<Long> categories) {
+            List<Long> categories, MultipartFile file) {
         this.title = title;
         this.resume = resume;
         this.shortResume = shortResume;
         this.releaseYear = releaseYear;
         this.type = type;
         this.categories = categories;
+        this.file = file;
     }
 
     public String getTitle() {
@@ -115,6 +119,14 @@ public class PostContentRequestDto {
     public PostContentRequestDto categories(List<Long> categories) {
         setCategories(categories);
         return this;
+    }
+
+    public MultipartFile getFile() {
+        return this.file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
 }

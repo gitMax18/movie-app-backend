@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.maxime.movieappbackend.model.Category;
 import com.maxime.movieappbackend.response.Response;
-import com.maxime.movieappbackend.service.content.CategoryService;
+import com.maxime.movieappbackend.service.category.CategoryService;
 
 @RestController
 @CrossOrigin(origins = { "${app.origin}" })

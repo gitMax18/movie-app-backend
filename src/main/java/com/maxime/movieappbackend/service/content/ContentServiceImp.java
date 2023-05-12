@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.Exception.exceptionTypes.UniqueConstraintException;
@@ -14,17 +15,20 @@ import com.maxime.movieappbackend.dto.content.PostContentToContentMapper;
 import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.repository.CategoryRepository;
 import com.maxime.movieappbackend.repository.ContentRepository;
+import com.maxime.movieappbackend.service.file.FileService;
 
 @Service
 public class ContentServiceImp implements ContentService {
 
     private ContentRepository contentRepository;
     private PostContentToContentMapper postContentToContentMapper;
+    private FileService fileService;
 
     public ContentServiceImp(ContentRepository contentRepository, CategoryRepository categoryRepository,
-            PostContentToContentMapper postContentToContentMapper) {
+            PostContentToContentMapper postContentToContentMapper, FileService fileService) {
         this.contentRepository = contentRepository;
         this.postContentToContentMapper = postContentToContentMapper;
+        this.fileService = fileService;
 
     }
 
@@ -40,7 +44,6 @@ public class ContentServiceImp implements ContentService {
         if (!opContent.isPresent()) {
             throw new RessourceNotFoundException("Content with id " + id + " not found");
         }
-
         return opContent.get();
     }
 
@@ -51,7 +54,12 @@ public class ContentServiceImp implements ContentService {
             details.put("title", contentDto.getTitle() + " already exist, title must be unique");
             throw new UniqueConstraintException("Constraint violation", details);
         }
+        String fileName = null;
+        if (contentDto.getFile() instanceof MultipartFile) {
+            fileName = fileService.uploadFile(contentDto.getFile());
+        }
         Content content = postContentToContentMapper.apply(contentDto);
+        content.setImagePath(fileName);
         return contentRepository.save(content);
     }
 
@@ -61,7 +69,6 @@ public class ContentServiceImp implements ContentService {
         if (!opContent.isPresent()) {
             throw new RessourceNotFoundException("Content with id " + id + " not found");
         }
-
         contentRepository.deleteById(id);
     }
 

@@ -10,8 +10,9 @@ CREATE TABLE
         title VARCHAR(150) NOT NULL UNIQUE,
         resume TEXT NOT NULL,
         short_resume VARCHAR(255),
-        release_year YEAR,
-        type VARCHAR(50) NOT NULL
+        release_year YEAR NOT NULL,
+        type VARCHAR(50) NOT NULL,
+        image_path VARCHAR(200) UNIQUE
     );
 
 CREATE TABLE
