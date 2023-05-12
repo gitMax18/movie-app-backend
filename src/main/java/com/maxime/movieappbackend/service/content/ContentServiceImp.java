@@ -79,9 +79,17 @@ public class ContentServiceImp implements ContentService {
             details.put("title", contentDto.getTitle() + " already exist, title must be unique");
             throw new UniqueConstraintException("Constraint violation", details);
         }
+        String fileName = null;
+        if (contentDto.getFile() instanceof MultipartFile) {
+            fileName = fileService.uploadFile(contentDto.getFile());
+            String oldFileName = contentRepository.findImageNameById(id);
+            if (oldFileName != null) {
+                fileService.removeFile(oldFileName);
+            }
+        }
         Content content = postContentToContentMapper.apply(contentDto);
+        content.setImagePath(fileName);
         content.setId(id);
         return contentRepository.save(content);
     }
-
 }

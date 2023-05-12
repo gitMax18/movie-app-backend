@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,9 +65,9 @@ public class ContentController {
         return new Response<NullNode>(HttpStatus.OK.value(), "Content deleted", null);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public Response<Content> updateContent(@PathVariable Long id,
-            @Valid @RequestBody PostContentRequestDto contentDto) {
+            @Valid @ModelAttribute PostContentRequestDto contentDto) {
         Content updatedContent = contentService.updateContent(id, contentDto);
 
         return new Response<Content>(HttpStatus.OK.value(), "Content updated", updatedContent);
@@ -77,7 +76,6 @@ public class ContentController {
     @GetMapping("/image/{fileName}")
     public ResponseEntity<Resource> getContentImage(@PathVariable String fileName) {
         Resource resource = fileService.downloadFile(fileName);
-        System.out.println(resource.getFilename());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + resource.getFilename() + "\"")
                 .body(resource);

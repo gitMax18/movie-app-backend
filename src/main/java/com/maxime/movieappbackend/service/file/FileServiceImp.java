@@ -60,4 +60,16 @@ public class FileServiceImp implements FileService {
         }
     }
 
+    @Override
+    public void removeFile(String fileName) {
+        Path path = directory.resolve(fileName);
+        if (Files.exists(path)) {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                throw new RuntimeException("Cannot delete file");
+            }
+        }
+    }
+
 }

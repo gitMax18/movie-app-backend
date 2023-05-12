@@ -9,4 +9,6 @@ public interface FileService {
     String uploadFile(MultipartFile file);
 
     public Resource downloadFile(String path);
+
+    public void removeFile(String fileName);
 }
