@@ -69,6 +69,10 @@ public class ContentServiceImp implements ContentService {
         if (!opContent.isPresent()) {
             throw new RessourceNotFoundException("Content with id " + id + " not found");
         }
+        String fileName = contentRepository.findImageNameById(id);
+        if (fileName != null) {
+            fileService.removeFile(fileName);
+        }
         contentRepository.deleteById(id);
     }
 
