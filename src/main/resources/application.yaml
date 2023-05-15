@@ -3,5 +3,15 @@ spring:
         url: jdbc:mysql://localhost:3306/movie_app
         username: root
         password:
+        driver-class-name: com.mysql.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+        database: mysql
+# custom
 app:
     origin: http://localhost:4200
