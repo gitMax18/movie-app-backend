@@ -2,11 +2,15 @@ package com.maxime.movieappbackend.service.authenticationService;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.dto.auth.RegisterRequestDto;
+import com.maxime.movieappbackend.dto.auth.UserDto;
+import com.maxime.movieappbackend.dto.auth.UserToUserDtoMapper;
 import com.maxime.movieappbackend.model.RoleType;
 import com.maxime.movieappbackend.model.User;
 import com.maxime.movieappbackend.repository.UserRepository;
@@ -19,13 +23,16 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserToUserDtoMapper userToUserDtoMapper;
 
     public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            JwtService jwtService, AuthenticationManager authenticationManager) {
+            JwtService jwtService, AuthenticationManager authenticationManager,
+            UserToUserDtoMapper userToUserDtoMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.userToUserDtoMapper = userToUserDtoMapper;
 
     }
 
@@ -48,5 +55,15 @@ public class AuthenticationService {
 
         String jwtToken = jwtService.generateToken(user);
         return jwtToken;
+    }
+
+    public UserDto getUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() == null) {
+            throw new RessourceNotFoundException("Can get user");
+        }
+
+        User user = (User) auth.getPrincipal();
+        return userToUserDtoMapper.apply(user);
     }
 }
