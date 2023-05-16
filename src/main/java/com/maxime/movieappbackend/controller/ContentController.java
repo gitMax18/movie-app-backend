@@ -27,7 +27,7 @@ import com.maxime.movieappbackend.service.file.FileService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = { "${app.origin}" })
+// @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/contents")
 public class ContentController {
