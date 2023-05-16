@@ -16,6 +16,9 @@ import com.maxime.movieappbackend.model.User;
 import com.maxime.movieappbackend.repository.UserRepository;
 import com.maxime.movieappbackend.service.jwt.JwtService;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+
 @Service
 public class AuthenticationService {
 
@@ -53,7 +56,9 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RessourceNotFoundException("user not found"));
 
-        String jwtToken = jwtService.generateToken(user);
+        Claims claims = Jwts.claims();
+        claims.put("user", userToUserDtoMapper.apply(user));
+        String jwtToken = jwtService.generateToken(claims, user);
         return jwtToken;
     }
 
