@@ -54,8 +54,9 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleType.USER);
         userRepository.save(user);
-
-        String jwtToken = jwtService.generateToken(user);
+        Claims claims = Jwts.claims();
+        claims.put("user", userToUserDtoMapper.apply(user));
+        String jwtToken = jwtService.generateToken(claims, user);
         return jwtToken;
     }
 

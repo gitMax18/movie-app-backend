@@ -28,12 +28,14 @@ public class PostContentRequestDto {
     private String type;
     List<Long> categories = new ArrayList<>();
     MultipartFile file;
+    @NotNull
+    private Long userId;
 
     public PostContentRequestDto() {
     }
 
     public PostContentRequestDto(String title, String resume, String shortResume, Integer releaseYear, String type,
-            List<Long> categories, MultipartFile file) {
+            List<Long> categories, MultipartFile file, Long userId) {
         this.title = title;
         this.resume = resume;
         this.shortResume = shortResume;
@@ -41,6 +43,7 @@ public class PostContentRequestDto {
         this.type = type;
         this.categories = categories;
         this.file = file;
+        this.userId = userId;
     }
 
     public String getTitle() {
@@ -127,6 +130,14 @@ public class PostContentRequestDto {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
 }

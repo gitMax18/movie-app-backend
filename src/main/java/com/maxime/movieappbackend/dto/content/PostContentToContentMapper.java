@@ -8,16 +8,20 @@ import org.springframework.stereotype.Service;
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.model.ContentType;
+import com.maxime.movieappbackend.model.User;
 import com.maxime.movieappbackend.repository.CategoryRepository;
+import com.maxime.movieappbackend.repository.UserRepository;
 import com.maxime.movieappbackend.model.Category;
 
 @Service
 public class PostContentToContentMapper implements Function<PostContentRequestDto, Content> {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
-    public PostContentToContentMapper(CategoryRepository categoryRepository) {
+    public PostContentToContentMapper(CategoryRepository categoryRepository, UserRepository userRepository) {
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,6 +41,13 @@ public class PostContentToContentMapper implements Function<PostContentRequestDt
                 content.addCategory(opCategory.get());
             }
         }
+        Optional<User> opUser = userRepository.findById(contentDto.getUserId());
+        if (!opUser.isPresent()) {
+            throw new RessourceNotFoundException("User with id " + contentDto.getUserId() + " not found");
+        }
+
+        content.setUser(opUser.get());
+
         return content;
     }
 

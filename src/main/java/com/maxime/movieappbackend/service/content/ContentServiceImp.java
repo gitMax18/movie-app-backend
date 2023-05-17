@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.Exception.exceptionTypes.UniqueConstraintException;
+import com.maxime.movieappbackend.dto.content.ContentResponseDto;
+import com.maxime.movieappbackend.dto.content.ContentToContentDtoResponseMapper;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
 import com.maxime.movieappbackend.dto.content.PostContentToContentMapper;
 import com.maxime.movieappbackend.model.Content;
@@ -23,32 +27,36 @@ public class ContentServiceImp implements ContentService {
     private ContentRepository contentRepository;
     private PostContentToContentMapper postContentToContentMapper;
     private FileService fileService;
+    private ContentToContentDtoResponseMapper contentToContentDtoResponseMapper;
 
     public ContentServiceImp(ContentRepository contentRepository, CategoryRepository categoryRepository,
-            PostContentToContentMapper postContentToContentMapper, FileService fileService) {
+            PostContentToContentMapper postContentToContentMapper, FileService fileService,
+            ContentToContentDtoResponseMapper contentToContentDtoResponseMapper) {
         this.contentRepository = contentRepository;
         this.postContentToContentMapper = postContentToContentMapper;
         this.fileService = fileService;
+        this.contentToContentDtoResponseMapper = contentToContentDtoResponseMapper;
 
     }
 
     @Override
-    public List<Content> getAllContent() {
-        List<Content> contents = contentRepository.findAll();
+    public List<ContentResponseDto> getAllContent() {
+        List<ContentResponseDto> contents = contentRepository.findAll().stream()
+                .map(contentToContentDtoResponseMapper::apply).collect(Collectors.toList());
         return contents;
     }
 
     @Override
-    public Content getContentById(Long id) {
+    public ContentResponseDto getContentById(Long id) {
         Optional<Content> opContent = contentRepository.findById(id);
         if (!opContent.isPresent()) {
             throw new RessourceNotFoundException("Content with id " + id + " not found");
         }
-        return opContent.get();
+        return contentToContentDtoResponseMapper.apply(opContent.get());
     }
 
     @Override
-    public Content createContent(PostContentRequestDto contentDto) {
+    public ContentResponseDto createContent(PostContentRequestDto contentDto) {
         if (contentRepository.existsByTitle(contentDto.getTitle())) {
             Map<String, String> details = new HashMap<>();
             details.put("title", contentDto.getTitle() + " already exist, title must be unique");
@@ -60,7 +68,8 @@ public class ContentServiceImp implements ContentService {
         }
         Content content = postContentToContentMapper.apply(contentDto);
         content.setImagePath(fileName);
-        return contentRepository.save(content);
+        Content savedContent = contentRepository.save(content);
+        return contentToContentDtoResponseMapper.apply(savedContent);
     }
 
     @Override
@@ -77,7 +86,7 @@ public class ContentServiceImp implements ContentService {
     }
 
     @Override
-    public Content updateContent(Long id, PostContentRequestDto contentDto) {
+    public ContentResponseDto updateContent(Long id, PostContentRequestDto contentDto) {
         if (contentRepository.existsByTitle(contentDto.getTitle())) {
             Map<String, String> details = new HashMap<>();
             details.put("title", contentDto.getTitle() + " already exist, title must be unique");
@@ -94,6 +103,7 @@ public class ContentServiceImp implements ContentService {
         Content content = postContentToContentMapper.apply(contentDto);
         content.setImagePath(fileName);
         content.setId(id);
-        return contentRepository.save(content);
+        Content updatedContent = contentRepository.save(content);
+        return contentToContentDtoResponseMapper.apply(updatedContent);
     }
 }

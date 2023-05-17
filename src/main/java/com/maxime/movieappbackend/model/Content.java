@@ -3,16 +3,21 @@ package com.maxime.movieappbackend.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
@@ -34,6 +39,10 @@ public class Content {
     @Column(name = "image_path")
     private String imagePath;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "content_category", joinColumns = @JoinColumn(name = "content_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     List<Category> categories = new ArrayList<>();
@@ -42,7 +51,7 @@ public class Content {
     }
 
     public Content(String title, String resume, String shortResume, Integer releaseYear, ContentType type,
-            List<Category> categories, String imagePath) {
+            List<Category> categories, String imagePath, User user) {
         this.title = title;
         this.resume = resume;
         this.shortResume = shortResume;
@@ -50,6 +59,7 @@ public class Content {
         this.type = type;
         this.categories = categories;
         this.imagePath = imagePath;
+        this.user = user;
     }
 
     public void addCategory(Category category) {
@@ -155,6 +165,14 @@ public class Content {
         this.imagePath = imagePath;
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -164,6 +182,7 @@ public class Content {
                 ", shortResume='" + getShortResume() + "'" +
                 ", releaseYear='" + getReleaseYear() + "'" +
                 ", imagePath='" + getImagePath() + "'" +
+                ", user='" + getUser().getId() + "'" +
                 ", type='" + getType() + "'" +
                 "}";
     }

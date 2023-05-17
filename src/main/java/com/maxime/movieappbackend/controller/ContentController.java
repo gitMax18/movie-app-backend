@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.node.NullNode;
+import com.maxime.movieappbackend.dto.content.ContentResponseDto;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
-import com.maxime.movieappbackend.model.Content;
 import com.maxime.movieappbackend.response.Response;
 import com.maxime.movieappbackend.service.content.ContentService;
 import com.maxime.movieappbackend.service.file.FileService;
@@ -42,21 +41,22 @@ public class ContentController {
     }
 
     @GetMapping("")
-    public Response<List<Content>> getAllContent() {
-        return new Response<List<Content>>(HttpStatus.OK.value(), "Contents retrived", contentService.getAllContent());
+    public Response<List<ContentResponseDto>> getAllContent() {
+        return new Response<List<ContentResponseDto>>(HttpStatus.OK.value(), "Contents retrived",
+                contentService.getAllContent());
     }
 
     @GetMapping("{id}")
-    public Response<Content> getContentById(@PathVariable Long id) {
-        return new Response<Content>(HttpStatus.OK.value(), "Content with id " + id + " retrived",
+    public Response<ContentResponseDto> getContentById(@PathVariable Long id) {
+        return new Response<ContentResponseDto>(HttpStatus.OK.value(), "Content with id " + id + " retrived",
                 contentService.getContentById(id));
     }
 
     @PostMapping(value = "", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Response<Content> createContent(@Valid @ModelAttribute PostContentRequestDto contentDto) {
-        Content newContent = contentService.createContent(contentDto);
+    public Response<ContentResponseDto> createContent(@Valid @ModelAttribute PostContentRequestDto contentDto) {
+        ContentResponseDto newContent = contentService.createContent(contentDto);
 
-        return new Response<Content>(HttpStatus.CREATED.value(), "Content created", newContent);
+        return new Response<ContentResponseDto>(HttpStatus.CREATED.value(), "Content created", newContent);
     }
 
     @DeleteMapping("/{id}")
@@ -66,11 +66,11 @@ public class ContentController {
     }
 
     @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Response<Content> updateContent(@PathVariable Long id,
+    public Response<ContentResponseDto> updateContent(@PathVariable Long id,
             @Valid @ModelAttribute PostContentRequestDto contentDto) {
-        Content updatedContent = contentService.updateContent(id, contentDto);
+        ContentResponseDto updatedContent = contentService.updateContent(id, contentDto);
 
-        return new Response<Content>(HttpStatus.OK.value(), "Content updated", updatedContent);
+        return new Response<ContentResponseDto>(HttpStatus.OK.value(), "Content updated", updatedContent);
     }
 
     @GetMapping("/image/{fileName}")
@@ -80,5 +80,4 @@ public class ContentController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
-
 }
