@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.maxime.movieappbackend.dto.content.ContentResponseDto;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
-import com.maxime.movieappbackend.response.Response;
+import com.maxime.movieappbackend.dto.response.Response;
 import com.maxime.movieappbackend.service.content.ContentService;
 import com.maxime.movieappbackend.service.file.FileService;
 

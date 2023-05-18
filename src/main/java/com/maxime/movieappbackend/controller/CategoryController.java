@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxime.movieappbackend.dto.response.Response;
 import com.maxime.movieappbackend.model.Category;
-import com.maxime.movieappbackend.response.Response;
 import com.maxime.movieappbackend.service.category.CategoryService;
 
 @RestController

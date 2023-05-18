@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.maxime.movieappbackend.dto.auth.RegisterRequestDto;
 import com.maxime.movieappbackend.dto.auth.UserDto;
-import com.maxime.movieappbackend.response.Response;
+import com.maxime.movieappbackend.dto.response.Response;
 import com.maxime.movieappbackend.service.authenticationService.AuthenticationService;
 
 // @CrossOrigin(origins = "*")

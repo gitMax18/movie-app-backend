@@ -1,28 +1,19 @@
-package com.maxime.movieappbackend.response;
+package com.maxime.movieappbackend.dto.response;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class ErrorResponse {
+public class Response<T> {
     private int statusCode;
     private String message;
     private Long timestamp;
-    private Map<String, String> details = new HashMap<>();
+    private T data;
 
-    public ErrorResponse() {
+    public Response() {
     }
 
-    public ErrorResponse(int statusCode, String message, Map<String, String> details) {
+    public Response(int statusCode, String message, T data) {
         this.statusCode = statusCode;
         this.message = message;
         this.timestamp = System.currentTimeMillis();
-        this.details = details;
-    }
-
-    public ErrorResponse(int statusCode, String message) {
-        this.statusCode = statusCode;
-        this.message = message;
-        this.timestamp = System.currentTimeMillis();
+        this.data = data;
     }
 
     public int getStatusCode() {
@@ -49,12 +40,12 @@ public class ErrorResponse {
         this.timestamp = timestamp;
     }
 
-    public Map<String, String> getDetails() {
-        return this.details;
+    public T getData() {
+        return this.data;
     }
 
-    public void setDetails(Map<String, String> details) {
-        this.details = details;
+    public void setData(T data) {
+        this.data = data;
     }
 
 }

@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.maxime.movieappbackend.Exception.exceptionTypes.RessourceNotFoundException;
 import com.maxime.movieappbackend.Exception.exceptionTypes.UniqueConstraintException;
-import com.maxime.movieappbackend.response.ErrorResponse;
+import com.maxime.movieappbackend.dto.response.ErrorResponse;
+
 import org.springframework.validation.FieldError;
 
 @ControllerAdvice
