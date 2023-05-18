@@ -40,8 +40,8 @@ public class ContentServiceImp implements ContentService {
     }
 
     @Override
-    public List<ContentResponseDto> getAllContent() {
-        List<ContentResponseDto> contents = contentRepository.findAll().stream()
+    public List<ContentResponseDto> getAllContent(String title) {
+        List<ContentResponseDto> contents = contentRepository.findByTitleContainingIgnoreCase(title).stream()
                 .map(contentToContentDtoResponseMapper::apply).collect(Collectors.toList());
         return contents;
     }
@@ -87,7 +87,7 @@ public class ContentServiceImp implements ContentService {
 
     @Override
     public ContentResponseDto updateContent(Long id, PostContentRequestDto contentDto) {
-        if (contentRepository.existsByTitle(contentDto.getTitle())) {
+        if (contentRepository.countByTitleIgnoreSameId(contentDto.getTitle(), contentDto.getId()) > 0) {
             Map<String, String> details = new HashMap<>();
             details.put("title", contentDto.getTitle() + " already exist, title must be unique");
             throw new UniqueConstraintException("Constraint violation", details);

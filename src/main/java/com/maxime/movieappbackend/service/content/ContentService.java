@@ -6,7 +6,7 @@ import com.maxime.movieappbackend.dto.content.ContentResponseDto;
 import com.maxime.movieappbackend.dto.content.PostContentRequestDto;
 
 public interface ContentService {
-    List<ContentResponseDto> getAllContent();
+    List<ContentResponseDto> getAllContent(String title);
 
     ContentResponseDto getContentById(Long id);
 

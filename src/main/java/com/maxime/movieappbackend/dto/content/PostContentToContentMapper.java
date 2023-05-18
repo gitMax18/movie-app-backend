@@ -27,6 +27,9 @@ public class PostContentToContentMapper implements Function<PostContentRequestDt
     @Override
     public Content apply(PostContentRequestDto contentDto) {
         Content content = new Content();
+        if (contentDto.getId() != null) {
+            content.setId(contentDto.getId());
+        }
         content.setTitle(contentDto.getTitle());
         content.setReleaseYear(contentDto.getReleaseYear());
         content.setResume(contentDto.getResume());

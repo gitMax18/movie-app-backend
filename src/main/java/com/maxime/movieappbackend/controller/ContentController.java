@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -41,9 +42,9 @@ public class ContentController {
     }
 
     @GetMapping("")
-    public Response<List<ContentResponseDto>> getAllContent() {
+    public Response<List<ContentResponseDto>> getAllContent(@RequestParam("title") String title) {
         return new Response<List<ContentResponseDto>>(HttpStatus.OK.value(), "Contents retrived",
-                contentService.getAllContent());
+                contentService.getAllContent(title));
     }
 
     @GetMapping("{id}")

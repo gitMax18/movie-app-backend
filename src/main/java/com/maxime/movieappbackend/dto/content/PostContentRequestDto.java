@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class PostContentRequestDto {
+    private Long id;
     @NotBlank(message = "Title is required")
     private String title;
     @NotBlank(message = "Resume is required")
@@ -34,8 +35,10 @@ public class PostContentRequestDto {
     public PostContentRequestDto() {
     }
 
-    public PostContentRequestDto(String title, String resume, String shortResume, Integer releaseYear, String type,
+    public PostContentRequestDto(Long id, String title, String resume, String shortResume, Integer releaseYear,
+            String type,
             List<Long> categories, MultipartFile file, Long userId) {
+        this.id = id;
         this.title = title;
         this.resume = resume;
         this.shortResume = shortResume;
@@ -44,6 +47,14 @@ public class PostContentRequestDto {
         this.categories = categories;
         this.file = file;
         this.userId = userId;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
